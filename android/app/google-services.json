@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "330849933840",
+    "project_id": "quiz-banao",
+    "storage_bucket": "quiz-banao.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:330849933840:android:39ffadd9fa556dcb584895",
+        "android_client_info": {
+          "package_name": "com.example.quizbanao"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "330849933840-rfj65qphb767orudh2h0or8psibjhhsu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAls-4cjs9Wb8hD0h0KJTDpJR323XUmw7A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "330849933840-rfj65qphb767orudh2h0or8psibjhhsu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
