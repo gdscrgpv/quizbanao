@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class Question {
@@ -9,6 +12,27 @@ class Question {
 
 class QuizProvider with ChangeNotifier {
   List<Question> questions = [];
+
+  Future validateQuizId(String quizId) async {
+    if (quizId.isEmpty) {
+      return false;
+    }
+    FirebaseFirestore.instance
+        .collection('quizzes')
+        .doc(quizId)
+        .get()
+        .then((doc) {
+      Map data = doc.data() as Map;
+      if (doc.exists && data['active']) {
+        log("Exists and is active");
+        return true;
+      } else {
+        log("Does not exists");
+        return false;
+      }
+    });
+    return false;
+  }
 
   // fetch questions
   void fetchQuestions() {
