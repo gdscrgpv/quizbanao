@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 class Question {
   String question;
-  Set<String> options;
+  Map<String, dynamic> options;
   String answer;
   int time;
   Question(
@@ -23,6 +23,8 @@ class Quiz {
 
 class QuizProvider with ChangeNotifier {
   Quiz _quiz = Quiz(id: '', questions: []);
+  Quiz get quiz => _quiz;
+  bool loadingQuiz = true;
 
   Future<bool> validateQuizId(String quizId) async {
     if (quizId.isEmpty) {
@@ -47,25 +49,36 @@ class QuizProvider with ChangeNotifier {
   }
 
   // fetch questions
-  void fetchQuestions() {
-    _quiz.questions = [
-      // Question('What is the capital of India?',
-      //     {'New Delhi', 'Maharastra', 'Kolkata', 'Bihar'}, 'New Delhi'),
-      // Question('What is the capital of USA?',
-      //     {'New Delhi', 'Maharastra', 'Kolkata', 'Bihar'}, 'New Delhi'),
-      // Question('What is the capital of UK?',
-      //     {'New Delhi', 'Maharastra', 'Kolkata', 'Bihar'}, 'New Delhi'),
-      // Question('What is the capital of Australia?',
-      //     {'New Delhi', 'Maharastra', 'Kolkata', 'Bihar'}, 'New Delhi'),
-      // Question('What is the capital of Canada?',
-      //     {'New Delhi', 'Maharastra', 'Kolkata', 'Bihar'}, 'New Delhi'),
-      // Question('What is the capital of Germany?',
-      //     {'New Delhi', 'Maharastra', 'Kolkata', 'Bihar'}, 'New Delhi'),
-      // Question('What is the capital of Italy?',
-      //     {'New Delhi', 'Maharastra', 'Kolkata', 'Bihar'}, 'New Delhi'),
-      // Question('What is the capital of Japan?',
-      //     {'New Delhi', 'Maharastra', 'Kolkata', 'Bihar'}, 'New Delhi')
-    ];
+  void fetchQuiz(String id) async {
+    loadingQuiz = true;
+    notifyListeners();
+    var doc =
+        await FirebaseFirestore.instance.collection('quizzes').doc(id).get();
+    if (doc == null) {
+      loadingQuiz = false;
+      notifyListeners();
+      return;
+    }
+    if (doc.exists) {
+      Map data = doc.data() as Map<String, dynamic>;
+      // log(data.toString());
+      // log(data['questions']['question'].toString());
+
+      _quiz = Quiz(
+          id: id,
+          questions: List.castFrom((data['questions'].values.map((q) {
+            log(q.toString());
+            return Question(
+              question: q['text'],
+              options: q['options'] as Map<String, dynamic>,
+              answer: q['answer'],
+              time: q['time'],
+            );
+          })).toList()));
+      log(_quiz.questions.length.toString());
+      loadingQuiz = false;
+      notifyListeners();
+    }
     notifyListeners();
   }
 }
