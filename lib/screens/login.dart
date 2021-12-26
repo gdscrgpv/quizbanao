@@ -19,14 +19,15 @@ class LoginScreen extends StatelessWidget {
     TextEditingController _quizIdController = TextEditingController();
 
     return Scaffold(
-      floatingActionButton: FloatingActionButton(onPressed: () async {
-        await Provider.of<QuizProvider>(context, listen: false)
-            .validateQuizId("123456");
+      resizeToAvoidBottomInset: true,
+      // floatingActionButton: FloatingActionButton(onPressed: () async {
+      //   await Provider.of<QuizProvider>(context, listen: false)
+      //       .validateQuizId("123456");
 
-        // FirebaseFirestore.instance
-        //     .collection('data')
-        //     .add({'text': 'data added through app'});
-      }),
+      //   // FirebaseFirestore.instance
+      //   //     .collection('data')
+      //   //     .add({'text': 'data added through app'});
+      // }),
       appBar: AppBar(
         title: Text("Start your quiz now!"),
       ),
@@ -37,9 +38,9 @@ class LoginScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              FlutterLogo(
-                size: 150,
-              ),
+              // FlutterLogo(
+              //   size: 120,
+              // ),
               SizedBox(height: 20),
               TextFormField(
                 controller: _nameController,
@@ -91,7 +92,7 @@ class LoginScreen extends StatelessWidget {
                     bool response =
                         await Provider.of<QuizProvider>(context, listen: false)
                             .validateQuizId(_quizIdController.text);
-
+                    log(response.toString());
                     if (response) {
                       // If Quiz ID correct then Create a new user entry
                       bool resp = await Provider.of<AuthProvider>(context,
@@ -101,7 +102,7 @@ class LoginScreen extends StatelessWidget {
                               email: _emailController.text,
                               quizId: _quizIdController.text,
                               marks: 0));
-
+                      log("User created");
                       // If user is created then navigate to the questions screen
                       if (resp) {
                         Navigator.of(context)
