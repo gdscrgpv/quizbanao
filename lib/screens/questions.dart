@@ -12,15 +12,23 @@ class QuizScreen extends StatefulWidget {
   _QuizScreenState createState() => _QuizScreenState();
 }
 
-class _QuizScreenState extends State<QuizScreen> {
-  PageController _pageController = PageController(
-    initialPage: 0,
-  );
+PageController _pageController = PageController(
+  initialPage: 0,
+);
+late int lastIndex = 100;
 
+class _QuizScreenState extends State<QuizScreen> {
   @override
   void initState() {
     super.initState();
     Provider.of<QuizProvider>(context, listen: false).fetchQuiz("123456");
+    setState(() {
+      lastIndex = Provider.of<QuizProvider>(context, listen: false)
+          .quiz
+          .questions
+          .length;
+    });
+    print("last" + lastIndex.toString());
   }
 
   @override
@@ -115,19 +123,36 @@ class ShowTimer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TimerBuilder.periodic(Duration(seconds: 1), builder: (context) {
-      return DateTime.now().difference(workStart) > Duration(seconds: time)
-          ? Container()
-          : Container(
-              padding: EdgeInsets.all(8.0),
-              decoration: BoxDecoration(
-                  color: Colors.yellow, borderRadius: BorderRadius.circular(5)),
-              child: Text(
-                "Time Left: " +
-                    (time - (DateTime.now().difference(workStart).inSeconds))
-                        .toString(),
-                style: TextStyle(color: Colors.black),
-              ));
-    });
+    //Need to navigate when last question
+    //  Navigator.of(context)
+    //                         .pushReplacementNamed(ResultScreen.routeName);
+
+    return DateTime.now().difference(workStart) <= Duration(seconds: time)
+        ? TimerBuilder.periodic(Duration(seconds: 1), builder: (context) {
+            print(_pageController.page.toString());
+            DateTime.now().difference(workStart) >= Duration(seconds: time) &&
+                    _pageController.page != lastIndex + 1
+                ? _pageController.nextPage(
+                    duration: Duration(milliseconds: 500), curve: Curves.easeIn)
+                : null;
+            return DateTime.now().difference(workStart) >=
+                    Duration(seconds: time)
+                ? Container()
+                : Container(
+                    padding: EdgeInsets.all(8.0),
+                    decoration: BoxDecoration(
+                        color: Colors.yellow,
+                        borderRadius: BorderRadius.circular(5)),
+                    child: Text(
+                      "Time Left: " +
+                          (time -
+                                  (DateTime.now()
+                                      .difference(workStart)
+                                      .inSeconds))
+                              .toString(),
+                      style: TextStyle(color: Colors.black),
+                    ));
+          })
+        : Container();
   }
 }
