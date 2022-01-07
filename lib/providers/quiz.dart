@@ -50,6 +50,7 @@ class QuizProvider with ChangeNotifier {
 
   // fetch questions
   void fetchQuiz(String id) async {
+    print("******* "+id.toString());
     loadingQuiz = true;
     notifyListeners();
     var doc =
@@ -61,8 +62,8 @@ class QuizProvider with ChangeNotifier {
     }
     if (doc.exists) {
       Map data = doc.data() as Map<String, dynamic>;
-      // log(data.toString());
-      // log(data['questions']['question'].toString());
+      print(data.toString());
+      print(data['questions']['question'].toString());
 
       _quiz = Quiz(
           id: id,
@@ -75,7 +76,7 @@ class QuizProvider with ChangeNotifier {
               time: q['time'],
             );
           })).toList()));
-      log(_quiz.questions.length.toString());
+      print(_quiz.questions.length.toString());
       loadingQuiz = false;
       notifyListeners();
     }
