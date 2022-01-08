@@ -8,14 +8,17 @@ class UserModel {
   String email;
   String quizId;
   int marks;
+  double timeTaken;
   UserModel(
       {required this.fullName,
       required this.email,
       required this.quizId,
-      required this.marks});
+      required this.marks,
+      required this.timeTaken});
 }
 
 class AuthProvider with ChangeNotifier {
+  late String userId;
   Future<bool> creteNewEntry(UserModel user) async {
     try {
       await FirebaseFirestore.instance.collection('users').add({
@@ -23,7 +26,8 @@ class AuthProvider with ChangeNotifier {
         'email': user.email,
         'quizId': user.quizId,
         'marks': user.marks,
-      });
+        'time_taken': user.timeTaken
+      }).then((value) => userId = value.id);
       return true;
     } catch (e) {
       log(e.toString());

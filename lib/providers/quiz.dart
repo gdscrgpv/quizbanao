@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:quizbanao/providers/auth.dart';
 
 class Question {
   String question;
@@ -25,6 +27,10 @@ class QuizProvider with ChangeNotifier {
   Quiz _quiz = Quiz(id: '', questions: []);
   Quiz get quiz => _quiz;
   bool loadingQuiz = true;
+  int _marks = 0;
+  int get marks => _marks;
+  double _timeTaken = 0;
+  double get timeTaken => _timeTaken;
 
   Future<bool> validateQuizId(String quizId) async {
     if (quizId.isEmpty) {
@@ -48,9 +54,31 @@ class QuizProvider with ChangeNotifier {
     }
   }
 
+  //submit responses
+  Future addAnswer(int index, String answer, double timeTaken, int maxTime) async {
+    if ("option" + index.toString() == answer) {
+      _marks++;
+      _timeTaken += timeTaken;
+      print("MARKS"+_marks.toString());
+      print("MARKS"+_timeTaken.toString());
+    }
+    else{
+      _timeTaken += maxTime;
+    }
+  }
+
+  Future<void> submitQuiz(String uid) async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .update({
+      'marks': _marks,
+      'time_taken': _timeTaken
+    });
+  }
   // fetch questions
   void fetchQuiz(String id) async {
-    print("******* "+id.toString());
+    print("******* " + id.toString());
     loadingQuiz = true;
     notifyListeners();
     var doc =

@@ -101,7 +101,8 @@ class LoginScreen extends StatelessWidget {
                               fullName: _nameController.text,
                               email: _emailController.text,
                               quizId: _quizIdController.text,
-                              marks: 0));
+                              marks: 0,
+                              timeTaken: 0.0));
                       log("User created");
                       // If user is created then navigate to the questions screen
                       if (resp) {
