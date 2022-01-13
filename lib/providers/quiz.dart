@@ -56,14 +56,20 @@ class QuizProvider with ChangeNotifier {
 
   //submit responses
   Future addAnswer(int index, String answer, double timeTaken, int maxTime) async {
+    print("MAKING SURE THIS RUN 3 TIME");
+    print("index: $index");
+    print("answer: $answer");
+    print("timeTaken: $timeTaken");
+    print("maxTime: $maxTime");
     if ("option" + index.toString() == answer) {
       _marks++;
       _timeTaken += timeTaken;
       print("MARKS"+_marks.toString());
-      print("MARKS"+_timeTaken.toString());
+      print("TIME"+_timeTaken.toString());
     }
     else{
       _timeTaken += maxTime;
+      print("TIME"+_timeTaken.toString());
     }
   }
 

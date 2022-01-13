@@ -72,6 +72,7 @@ class _QueScreenState extends State<QuestionWidget> {
   final Question question;
   _QueScreenState(this.question);
   var selectedOption = -1;
+  bool noneSelected = true;
   double _progressValue = 0.0;
 
   @override
@@ -109,6 +110,7 @@ class _QueScreenState extends State<QuestionWidget> {
                     if (selectedOption == -1)
                       setState(() {
                         selectedOption = index;
+                        noneSelected = false;
                         print("CALLING PROVIDER");
                         Provider.of<QuizProvider>(context,listen: false)
                         .addAnswer(index + 1, question.answer, _progressValue, question.time);
@@ -140,22 +142,19 @@ class _QueScreenState extends State<QuestionWidget> {
     new Timer.periodic(oneSec, (Timer t) {
       setState(() {
         _progressValue += 1;
-        print(_progressValue);
-        print("PGC" + _pageController.page.toString());
-        print("LI" + lastIndex.toString());
+        // print(_progressValue);
+        // print("PGC" + _pageController.page.toString());
+        // print("LI" + lastIndex.toString());
         if (_progressValue >= time && _pageController.page == lastIndex - 1) {
           t.cancel();
           Provider.of<QuizProvider>(context, listen: false).submitQuiz(
               Provider.of<AuthProvider>(context, listen: false).userId);
           Navigator.of(context).pushReplacementNamed(ResultScreen.routeName);
         }
-        // if(_pageController.page == lastIndex && _progressValue == time){
-        //   t.cancel();
-        //   Navigator.of(context)
-        //                     .pushReplacementNamed(ResultScreen.routeName);
-        // }
         if (_progressValue == time) {
           t.cancel();
+          if(noneSelected)
+            Provider.of<QuizProvider>(context, listen: false).addAnswer(0, "1", 0, time);
           _pageController.nextPage(
               duration: Duration(milliseconds: 500), curve: Curves.easeIn);
           return;
@@ -164,46 +163,3 @@ class _QueScreenState extends State<QuestionWidget> {
     });
   }
 }
-// }
-
-// class ShowTimer extends StatelessWidget {
-//   ShowTimer(this.workStart, this.time);
-//   final DateTime workStart;
-//   final int time;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final _myTimer;
-//     //Need to navigate when last question
-//     //  Navigator.of(context)
-//     //                         .pushReplacementNamed(ResultScreen.routeName);
-
-//     return DateTime.now().difference(workStart) <= Duration(seconds: time)
-//         ? TimerBuilder.periodic(Duration(seconds: 1), builder: (context) {
-//             print(_pageController.page.toString());
-//             DateTime.now().difference(workStart) >= Duration(seconds: time) &&
-//                     _pageController.page != lastIndex + 1
-//                 ? _pageController.nextPage(
-//                     duration: Duration(milliseconds: 500), curve: Curves.easeIn)
-//                 : Container();
-//             return DateTime.now().difference(workStart) >=
-//                     Duration(seconds: time)
-//                 ? Container()
-//                 : Container(
-//                     padding: EdgeInsets.all(8.0),
-//                     decoration: BoxDecoration(
-//                         color: Colors.yellow,
-//                         borderRadius: BorderRadius.circular(5)),
-//                     child: Text(
-//                       "Time Left: " +
-//                           (time -
-//                                   (DateTime.now()
-//                                       .difference(workStart)
-//                                       .inSeconds))
-//                               .toString(),
-//                       style: TextStyle(color: Colors.black),
-//                     ));
-//           })
-//         : Container();
-//   }
-// }

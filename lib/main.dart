@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quizbanao/providers/auth.dart';
 import 'package:quizbanao/providers/quiz.dart';
+import 'package:quizbanao/providers/result.dart';
 import 'package:quizbanao/screens/login.dart';
 import 'package:quizbanao/screens/questions.dart';
 import 'package:quizbanao/screens/results.dart';
@@ -21,6 +22,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => QuizProvider()),
         ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => ResultProvider()),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

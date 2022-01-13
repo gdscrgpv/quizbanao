@@ -1,29 +1,85 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quizbanao/providers/quiz.dart';
+import 'package:quizbanao/providers/result.dart';
 
 class ResultScreen extends StatelessWidget {
   static const routeName = "/results-screen";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(),
-        body: Consumer<QuizProvider>(builder: (context, value, child) {
-          double timetaken = 0;
-          value.quiz.questions.forEach((element) {timetaken+=element.time;});
-          print(timetaken);
-          return Center(
-            child: Container(
-              height: MediaQuery.of(context).size.height,
-              child: Column(
-                children: [
-                  SizedBox(height: 20),
-                  Text('You answered '+value.marks.toString()+' out of '+value.quiz.questions.length.toString()+' questions correctly'),
-                  Text('You took '+value.timeTaken.toString()+' time out of '+timetaken.toString()+' total time to answer each questions.'),
-                ],
-              ),
-            ),
-          );
-        }));
+        appBar: AppBar(
+          title: Text('Results'),
+        ),
+        body: PageView(
+          children: [LeaderBoard(), AnswerContainer()],
+        ));
+  }
+}
+
+class AnswerContainer extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<QuizProvider>(builder: (context, value, child) {
+      double timetaken = 0;
+      value.quiz.questions.forEach((element) {
+        timetaken += element.time;
+      });
+      return Column(
+        children: [
+          SizedBox(height: 20),
+          Text('You answered ' +
+              value.marks.toString() +
+              ' out of ' +
+              value.quiz.questions.length.toString() +
+              ' questions correctly'),
+          Text('You took ' +
+              value.timeTaken.toString() +
+              ' time out of ' +
+              timetaken.toString() +
+              ' total time to answer each questions.'),
+        ],
+      );
+    });
+  }
+}
+
+class LeaderBoard extends StatefulWidget {
+  @override
+  State<LeaderBoard> createState() => _LeaderBoardState();
+}
+
+class _LeaderBoardState extends State<LeaderBoard> {
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<ResultProvider>(context, listen: false).getResult();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<ResultProvider>(
+        builder: (context, value, child) => value.loadingQuiz
+            ? Center(child: CircularProgressIndicator())
+            : value.topperData.length == 0
+                ? Center(child: Text('No results yet'))
+                : Column(children: [
+                  SizedBox(height: 10,),
+                    Text('Leaderboard',style: TextStyle(fontSize: 20),),
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: value.topperData.length,
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                            title: Text(value.topperData[index].fullName),
+                            subtitle:
+                                Text(value.topperData[index].marks.toString()),
+                            trailing:
+                                Text(value.topperData[index].email.toString()),
+                          );
+                        },
+                      ),
+                    )
+                  ]));
   }
 }
