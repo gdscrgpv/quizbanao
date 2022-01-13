@@ -61,6 +61,9 @@ class QuizProvider with ChangeNotifier {
     print("answer: $answer");
     print("timeTaken: $timeTaken");
     print("maxTime: $maxTime");
+    if(timeTaken>maxTime){
+      timeTaken=maxTime.toDouble();
+    }
     if ("option" + index.toString() == answer) {
       _marks++;
       _timeTaken += timeTaken;

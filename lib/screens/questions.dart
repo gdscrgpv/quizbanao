@@ -35,7 +35,7 @@ class _QuizScreenState extends State<QuizScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Quiz")),
+      appBar: AppBar(title: Center(child: Text("Quiz",style: TextStyle(color: Colors.black),)),backgroundColor: Colors.white,elevation: 0,),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.chevron_right),
         tooltip: "Next",
@@ -88,23 +88,41 @@ class _QueScreenState extends State<QuestionWidget> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        LinearProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(getIndicatorColors),
+          backgroundColor: Colors.grey,
+          value: _progressValue / question.time.toDouble(),
+        ),
         SizedBox(height: 20),
-        Text(
-          question.question,
-          style: TextStyle(
-              color: selectedOption != -1 ? Colors.grey : Colors.black),
+        Container(
+          child: Text(
+            question.question,
+            style: TextStyle(
+              fontSize: 20,
+                color: selectedOption != -1 ? Colors.grey : Colors.black),
+          ),
         ),
         SizedBox(height: 20),
         Expanded(
           child: ListView.builder(
               itemBuilder: (context, index) {
                 return ListTile(
-                  title: Text(
-                    question.options["option" + (index + 1).toString()]
-                        .toString(),
-                    style: TextStyle(
-                        color:
-                            selectedOption != -1 ? Colors.grey : Colors.black),
+                  title: Container(
+                    padding: EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      color: Colors.black12,
+                        border: Border.all(
+                            color: selectedOption == index
+                                ? Colors.green
+                                : Colors.grey),
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Text(
+                      question.options["option" + (index + 1).toString()]
+                          .toString(),
+                      style: TextStyle(
+                          color:
+                              selectedOption != -1 ? Colors.grey : Colors.black),
+                    ),
                   ),
                   onTap: () {
                     if (selectedOption == -1)
@@ -121,12 +139,6 @@ class _QueScreenState extends State<QuestionWidget> {
               itemCount: 4),
         ),
         // ShowTimer(DateTime.now(), question.time.toInt()),
-        LinearProgressIndicator(
-          valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
-          backgroundColor: Colors.grey,
-          value: _progressValue / question.time.toDouble(),
-        ),
-        Text('${(_progressValue * 100).round()}%'),
         selectedOption != -1
             ? Text("Locked Answer: " +
                 question.options["option" + (selectedOption + 1).toString()]
@@ -137,11 +149,24 @@ class _QueScreenState extends State<QuestionWidget> {
     );
   }
 
+  get getIndicatorColors {
+    double timeLeft = 1 - _progressValue / question.time.toDouble();
+    if (timeLeft > 0.75) {
+      return Colors.green;
+    } else if (timeLeft > 0.35 && timeLeft <= 0.75) {
+      return Colors.yellow;
+    } else if (timeLeft > 0.15 && timeLeft <= 0.35) {
+      return Colors.orange;
+    } else {
+      return Colors.red;
+    }
+  }
+
   void _updateProgress(int time) {
-    const oneSec = const Duration(seconds: 1);
+    const oneSec = const Duration(milliseconds: 200);
     new Timer.periodic(oneSec, (Timer t) {
       setState(() {
-        _progressValue += 1;
+        _progressValue += 0.2;
         // print(_progressValue);
         // print("PGC" + _pageController.page.toString());
         // print("LI" + lastIndex.toString());
@@ -151,7 +176,7 @@ class _QueScreenState extends State<QuestionWidget> {
               Provider.of<AuthProvider>(context, listen: false).userId);
           Navigator.of(context).pushReplacementNamed(ResultScreen.routeName);
         }
-        if (_progressValue == time) {
+        if (_progressValue >= time) {
           t.cancel();
           if(noneSelected)
             Provider.of<QuizProvider>(context, listen: false).addAnswer(0, "1", 0, time);
