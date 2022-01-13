@@ -77,11 +77,9 @@ class QuizProvider with ChangeNotifier {
     await FirebaseFirestore.instance
         .collection('users')
         .doc(uid)
-        .update({
-      'marks': _marks,
-      'time_taken': _timeTaken
-    });
+        .update({'marks': _marks, 'time_taken': _timeTaken});
   }
+
   // fetch questions
   void fetchQuiz(String id) async {
     print("******* " + id.toString());

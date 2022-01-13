@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:quizbanao/providers/auth.dart';
 import 'package:quizbanao/providers/quiz.dart';
@@ -8,6 +9,8 @@ import 'package:quizbanao/providers/result.dart';
 import 'package:quizbanao/screens/login.dart';
 import 'package:quizbanao/screens/questions.dart';
 import 'package:quizbanao/screens/results.dart';
+import 'package:quizbanao/screens/splash.dart';
+import 'package:quizbanao/utils/colors.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,13 +28,14 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ResultProvider()),
       ],
       child: MaterialApp(
-        title: 'Flutter Demo',
+        title: 'Quiz Banao',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primaryColor: QColorScheme.blue3,
         ),
-        home: LoginScreen(),
+        home: SplashScreen(),
         routes: {
+          SplashScreen.routeName: (ctx) => SplashScreen(),
           LoginScreen.routeName: (context) => LoginScreen(),
           QuizScreen.routeName: (context) => QuizScreen(),
           ResultScreen.routeName: (context) => ResultScreen(),
