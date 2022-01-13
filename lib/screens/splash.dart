@@ -47,7 +47,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 style: GoogleFonts.monoton(
                     fontSize: 50,
                     fontWeight: FontWeight.w300,
-                    color: QColorScheme.white)),
+                    color: QColorScheme.yellow2)),
             // Text("An initiative by"),
           ],
         ),
