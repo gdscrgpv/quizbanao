@@ -55,14 +55,14 @@ class QuizProvider with ChangeNotifier {
   }
 
   //submit responses
-  Future addAnswer(int index, String answer, double timeTaken, int maxTime) async {
+  Future addAnswer(
+      int index, String answer, double timeTaken, int maxTime) async {
     if ("option" + index.toString() == answer) {
       _marks++;
       _timeTaken += timeTaken;
-      print("MARKS"+_marks.toString());
-      print("MARKS"+_timeTaken.toString());
-    }
-    else{
+      print("MARKS" + _marks.toString());
+      print("MARKS" + _timeTaken.toString());
+    } else {
       _timeTaken += maxTime;
     }
   }
@@ -71,11 +71,9 @@ class QuizProvider with ChangeNotifier {
     await FirebaseFirestore.instance
         .collection('users')
         .doc(uid)
-        .update({
-      'marks': _marks,
-      'time_taken': _timeTaken
-    });
+        .update({'marks': _marks, 'time_taken': _timeTaken});
   }
+
   // fetch questions
   void fetchQuiz(String id) async {
     print("******* " + id.toString());

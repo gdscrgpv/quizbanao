@@ -32,6 +32,9 @@ dependencies:
   cloud_firestore: ^2.5.4
   timer_builder: ^2.0.0
   percent_indicator: "^2.1.7+2"
+  google_fonts: ^2.2.0
+  page_transition: ^2.0.4
+  animated_text_kit: ^4.2.1
 
   provider: ^6.0.1
 

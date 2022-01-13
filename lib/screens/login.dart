@@ -1,11 +1,15 @@
 import 'dart:developer';
 
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:quizbanao/providers/auth.dart';
 import 'package:quizbanao/providers/quiz.dart';
 import 'package:quizbanao/screens/questions.dart';
+import 'package:quizbanao/utils/colors.dart';
+import 'package:quizbanao/utils/text.dart';
 
 class LoginScreen extends StatelessWidget {
   static const routeName = "/auth";
@@ -24,12 +28,14 @@ class LoginScreen extends StatelessWidget {
       //   await Provider.of<QuizProvider>(context, listen: false)
       //       .validateQuizId("123456");
 
-      //   // FirebaseFirestore.instance
-      //   //     .collection('data')
-      //   //     .add({'text': 'data added through app'});
+      // FirebaseFirestore.instance
+      //     .collection('data')
+      //     .add({'text': 'data added through app'});
       // }),
+      // backgroundColor: ,
       appBar: AppBar(
-        title: Text("Start your quiz now!"),
+        title: Text(QTextData.app_name,
+            style: TextStyle(fontSize: 20, wordSpacing: 6)),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -41,6 +47,37 @@ class LoginScreen extends StatelessWidget {
               // FlutterLogo(
               //   size: 120,
               // ),
+              Container(
+                height: 50,
+                child: Row(
+                  children: <Widget>[
+                    const SizedBox(width: 0.0, height: 100.0),
+                    const Text(
+                      'Be',
+                      style: TextStyle(fontSize: 43.0),
+                    ),
+                    const SizedBox(width: 20.0, height: 100.0),
+                    DefaultTextStyle(
+                      style: GoogleFonts.adventPro(
+                        fontSize: 45.0,
+                        fontWeight: FontWeight.w900,
+                        color: QColorScheme.yellow2,
+                        letterSpacing: -1.0,
+                      ),
+                      child:
+                          AnimatedTextKit(repeatForever: true, animatedTexts: [
+                        RotateAnimatedText('AWESOME'),
+                        RotateAnimatedText('OPTIMISTIC'),
+                        RotateAnimatedText('DIFFERENT'),
+                      ]
+                              // onTap: () {
+                              //   print("Tap Event");
+                              // },
+                              ),
+                    ),
+                  ],
+                ),
+              ),
               SizedBox(height: 20),
               TextFormField(
                 controller: _nameController,
@@ -122,6 +159,10 @@ class LoginScreen extends StatelessWidget {
                     }
                   }
                 },
+                style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all(QColorScheme.blue4),
+                ),
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Text("Start Quiz"),
