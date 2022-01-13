@@ -9,6 +9,7 @@ class ResultProvider with ChangeNotifier {
   List<UserModel> get topperData => _topperData;
 
   Future getResult() async {
+    topperData.clear();
     loadingQuiz = true;
     FirebaseFirestore.instance.collection('users').get().then((value) {
       value.docs.forEach((element) {
@@ -28,7 +29,7 @@ class ResultProvider with ChangeNotifier {
       notifyListeners();
       _topperData.sort((a, b){
         if (b.marks == a.marks) {
-          return b.timeTaken.compareTo(a.timeTaken);
+          return a.timeTaken.compareTo(b.timeTaken);
         }
         return b.marks.compareTo(a.marks);
       });

@@ -58,6 +58,11 @@ class _LeaderBoardState extends State<LeaderBoard> {
 
   @override
   Widget build(BuildContext context) {
+    // final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = new GlobalKey<RefreshIndicatorState>(debugLabel: '_LoginFormState');
+    Future _refresh() {
+  return Provider.of<ResultProvider>(context, listen: false).getResult();
+}
+
     return Consumer<ResultProvider>(
         builder: (context, value, child) => value.loadingQuiz
             ? Center(child: CircularProgressIndicator())
@@ -66,20 +71,30 @@ class _LeaderBoardState extends State<LeaderBoard> {
                 : Column(children: [
                   SizedBox(height: 10,),
                     Text('Leaderboard',style: TextStyle(fontSize: 20),),
+                    SizedBox(height: 10,),
                     Expanded(
-                      child: ListView.builder(
+                      child: RefreshIndicator(
+                            key: new GlobalKey<RefreshIndicatorState>(),
+                            onRefresh: _refresh,
+                            child:  ListView.builder(
                         itemCount: value.topperData.length,
                         itemBuilder: (context, index) {
-                          return ListTile(
-                            title: Text(value.topperData[index].fullName),
-                            subtitle:
-                                Text(value.topperData[index].marks.toString()),
-                            trailing:
-                                Text(value.topperData[index].email.toString()),
+                          return Card(
+                            child: ListTile(
+                              leading: Text(
+                                (index + 1).toString(),
+                                style: TextStyle(fontSize: 20),
+                              ),
+                              title: Text(value.topperData[index].email,style: TextStyle(fontSize: 15,overflow: TextOverflow.ellipsis),),
+                              subtitle:
+                                  Text("Points: "+value.topperData[index].marks.toString()+" Time: "+value.topperData[index].timeTaken.toString()),
+                              trailing:
+                                  Text(value.topperData[index].fullName.toString(),style: TextStyle(fontSize: 15,overflow: TextOverflow.ellipsis),),
+                            ),
                           );
                         },
                       ),
                     )
-                  ]));
+     ) ]));
   }
 }
