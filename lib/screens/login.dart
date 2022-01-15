@@ -22,12 +22,16 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
 
-    TextEditingController _emailController =
-        TextEditingController(text: "test@test.co");
-    TextEditingController _nameController =
-        TextEditingController(text: "Gustavo");
-    TextEditingController _quizIdController =
-        TextEditingController(text: "123456");
+    TextEditingController _emailController = TextEditingController();
+    TextEditingController _nameController = TextEditingController();
+    TextEditingController _quizIdController = TextEditingController();
+
+    //     TextEditingController _emailController =
+    //     TextEditingController(text: "test@test.co");
+    // TextEditingController _nameController =
+    //     TextEditingController(text: "Gustavo");
+    // TextEditingController _quizIdController =
+    //     TextEditingController(text: "123456");
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -43,12 +47,83 @@ class LoginScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(
-            Icons.menu,
-            color: Colors.black.withOpacity(0.5),
+        leading: Builder(
+          builder: (context) => IconButton(
+            icon: Icon(
+              Icons.menu,
+              color: Colors.black.withOpacity(0.5),
+            ),
+            onPressed: () {
+              log("message");
+              // open drawer
+              Scaffold.of(context).openDrawer();
+            },
           ),
-          onPressed: () {},
+        ),
+      ),
+      drawer: Drawer(
+        child: Column(
+          children: [
+            Container(
+              height: 200,
+              width: double.infinity,
+              color: Colors.black,
+              child: Center(
+                child: Text(
+                  "QuizBanao",
+                  style: GoogleFonts.poppins(
+                    fontSize: 40,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ),
+            ListTile(
+              title: Text(
+                "Home",
+                style: GoogleFonts.poppins(
+                  fontSize: 20,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              onTap: () {},
+            ),
+            ListTile(
+              title: Text(
+                "About",
+                style: GoogleFonts.poppins(
+                  fontSize: 20,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              onTap: () {},
+            ),
+            ListTile(
+              title: Text(
+                "Contact",
+                style: GoogleFonts.poppins(
+                  fontSize: 20,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              onTap: () {},
+            ),
+            ListTile(
+              title: Text(
+                "Logout",
+                style: GoogleFonts.poppins(
+                  fontSize: 20,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              onTap: () {},
+            ),
+          ],
         ),
       ),
       // extendBodyBehindAppBar: true,
