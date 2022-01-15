@@ -8,10 +8,12 @@ import 'package:quizbanao/providers/auth.dart';
 class Question {
   String question;
   Map<String, dynamic> options;
+  String imageUrl;
   String answer;
   int time;
   Question(
       {required this.question,
+      required this.imageUrl,
       required this.options,
       required this.answer,
       required this.time});
@@ -47,6 +49,7 @@ class QuizProvider with ChangeNotifier {
 
     if (doc.exists && data['active']) {
       log("Exists and is active!");
+      fetchQuiz(quizId);
       return true;
     } else {
       log("Does not exists");
@@ -55,24 +58,24 @@ class QuizProvider with ChangeNotifier {
   }
 
   //submit responses
-  Future addAnswer(int index, String answer, double timeTaken, int maxTime) async {
+  Future addAnswer(
+      int index, String answer, double timeTaken, int maxTime) async {
     print("MAKING SURE THIS RUN 3 TIME");
     print("index: $index");
     print("answer: $answer");
     print("timeTaken: $timeTaken");
     print("maxTime: $maxTime");
-    if(timeTaken>maxTime){
-      timeTaken=maxTime.toDouble();
+    if (timeTaken > maxTime) {
+      timeTaken = maxTime.toDouble();
     }
     if ("option" + index.toString() == answer) {
       _marks++;
       _timeTaken += timeTaken;
-      print("MARKS"+_marks.toString());
-      print("TIME"+_timeTaken.toString());
-    }
-    else{
+      print("MARKS" + _marks.toString());
+      print("TIME" + _timeTaken.toString());
+    } else {
       _timeTaken += maxTime;
-      print("TIME"+_timeTaken.toString());
+      print("TIME" + _timeTaken.toString());
     }
   }
 
@@ -97,24 +100,28 @@ class QuizProvider with ChangeNotifier {
     }
     if (doc.exists) {
       Map data = doc.data() as Map<String, dynamic>;
-      print(data.toString());
-      print(data['questions']['question'].toString());
+      // print(data.toString());
+      // print(data['questions']['question'].toString());
 
       _quiz = Quiz(
           id: id,
           questions: List.castFrom((data['questions'].values.map((q) {
-            log(q.toString());
+            // log(q.toString());
             return Question(
               question: q['text'],
+              imageUrl: q['imageUrl'],
               options: q['options'] as Map<String, dynamic>,
               answer: q['answer'],
               time: q['time'],
             );
           })).toList()));
-      print(_quiz.questions.length.toString());
+      // print(_quiz.questions.length.toString());
+
+    }
+    await Future.delayed(Duration(seconds: 2), () {
       loadingQuiz = false;
       notifyListeners();
-    }
-    notifyListeners();
+    });
+    // notifyListeners();
   }
 }

@@ -3,12 +3,16 @@ import 'dart:developer';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:quizbanao/providers/auth.dart';
 import 'package:quizbanao/providers/quiz.dart';
 import 'package:quizbanao/screens/questions.dart';
 import 'package:quizbanao/utils/colors.dart';
+import 'package:quizbanao/utils/files.dart';
 import 'package:quizbanao/utils/text.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -18,9 +22,12 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
 
-    TextEditingController _emailController = TextEditingController();
-    TextEditingController _nameController = TextEditingController();
-    TextEditingController _quizIdController = TextEditingController();
+    TextEditingController _emailController =
+        TextEditingController(text: "test@test.co");
+    TextEditingController _nameController =
+        TextEditingController(text: "Gustavo");
+    TextEditingController _quizIdController =
+        TextEditingController(text: "123456");
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -44,12 +51,13 @@ class LoginScreen extends StatelessWidget {
           onPressed: () {},
         ),
       ),
-
+      // extendBodyBehindAppBar: true,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Form(
           key: _formKey,
           child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
             child: Column(
               children: [
                 // FlutterLogo(
@@ -172,7 +180,11 @@ class LoginScreen extends StatelessWidget {
                                 border: OutlineInputBorder()),
                             keyboardType: TextInputType.number),
                         SizedBox(height: 20),
-                        SubmitButton(formKey: _formKey, quizIdController: _quizIdController, nameController: _nameController, emailController: _emailController)
+                        SubmitButton(
+                            formKey: _formKey,
+                            quizIdController: _quizIdController,
+                            nameController: _nameController,
+                            emailController: _emailController)
                       ],
                     ),
                   ),
@@ -193,7 +205,11 @@ class SubmitButton extends StatefulWidget {
     required TextEditingController quizIdController,
     required TextEditingController nameController,
     required TextEditingController emailController,
-  }) : _formKey = formKey, _quizIdController = quizIdController, _nameController = nameController, _emailController = emailController, super(key: key);
+  })  : _formKey = formKey,
+        _quizIdController = quizIdController,
+        _nameController = nameController,
+        _emailController = emailController,
+        super(key: key);
 
   final GlobalKey<FormState> _formKey;
   final TextEditingController _quizIdController;
@@ -208,70 +224,86 @@ class _SubmitButtonState extends State<SubmitButton> {
   bool loading = false;
   @override
   Widget build(BuildContext context) {
-    return loading? CircularProgressIndicator(): ElevatedButton(
-      onPressed: () async {
-        // Authentication Logic
-        setState(() {
-          loading = true;
-        });
-        if (widget._formKey.currentState!.validate()) {
-          // Validate the quiz ID
-          bool response = await Provider.of<QuizProvider>(
-                  context,
-                  listen: false)
-              .validateQuizId(widget._quizIdController.text);
-          log(response.toString());
-          if (response) {
-            // If Quiz ID correct then Create a new user entry
-            bool resp = await Provider.of<AuthProvider>(
-                    context,
-                    listen: false)
-                .creteNewEntry(UserModel(
-                    fullName: widget._nameController.text,
-                    email: widget._emailController.text,
-                    quizId: widget._quizIdController.text,
-                    marks: 0,
-                    timeTaken: 0.0));
-            log("User created");
-            // If user is created then navigate to the questions screen
-            if (resp) {
-              Navigator.of(context).pushReplacementNamed(
-                  QuizScreen.routeName);
-            } else {
-              setState(() {
-                loading = false;
-              });
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(
-                content: Text("Something went wrong!"),
-              ));
-            }
-          } else {
-            // If Quiz ID is incorrect then show a snackbar
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(
-              content: Text("Quiz ID is invalid"),
-              backgroundColor: Colors.red,
-            ));
-          }
-          setState(() {
-            loading = false;
-          });
-        }
-      },
-      style: ButtonStyle(
-        shape: MaterialStateProperty.all(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-        ),
-        backgroundColor:
-            MaterialStateProperty.all(QColorScheme.blue4),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Text("Start Quiz"),
-      ),
-    );
+    return loading
+        ? SpinKitThreeBounce(
+            itemBuilder: (BuildContext context, int index) {
+              return DecoratedBox(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color:
+                      index.isEven ? QColorScheme.blue4 : QColorScheme.yellow2,
+                ),
+              );
+            },
+          )
+        : ElevatedButton(
+            onPressed: () async {
+              // Authentication Logic
+              if (widget._formKey.currentState!.validate()) {
+                setState(() {
+                  loading = true;
+                });
+                // Validate the quiz ID
+                bool response =
+                    await Provider.of<QuizProvider>(context, listen: false)
+                        .validateQuizId(widget._quizIdController.text);
+
+                log(response.toString());
+                if (response) {
+                  // If Quiz ID correct then Create a new user entry
+                  bool resp =
+                      await Provider.of<AuthProvider>(context, listen: false)
+                          .creteNewEntry(UserModel(
+                              fullName: widget._nameController.text,
+                              email: widget._emailController.text,
+                              quizId: widget._quizIdController.text,
+                              marks: 0,
+                              timeTaken: 0.0));
+                  log("User created");
+                  // If user is created then navigate to the questions screen
+                  if (resp) {
+                    Navigator.of(context).pushReplacement(PageTransition(
+                        child: QuizScreen(),
+                        type: PageTransitionType.fade,
+                        duration: Duration(milliseconds: 500)));
+                  } else {
+                    setState(() {
+                      loading = false;
+                    });
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text("Something went wrong!"),
+                    ));
+                  }
+                } else {
+                  // If Quiz ID is incorrect then show a snackbar
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text("Quiz ID is invalid"),
+                    backgroundColor: Colors.red,
+                  ));
+                }
+                setState(() {
+                  loading = false;
+                });
+              }
+            },
+            style: ButtonStyle(
+              shape: MaterialStateProperty.all(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              backgroundColor: MaterialStateProperty.all(QColorScheme.blue4),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Text("Start Quiz",
+                  style: GoogleFonts.poppins(
+                    fontSize: 18,
+                    // fontWeight: FontWeight.w900,
+                    color: QColorScheme.white,
+                    letterSpacing: -1.0,
+                  )),
+            ),
+          );
   }
 }
