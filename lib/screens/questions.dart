@@ -52,13 +52,26 @@ class _QuizScreenState extends State<QuizScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.chevron_right),
-        tooltip: "Next",
-        onPressed: () {
-          Provider.of<QuizProvider>(context, listen: false).fetchQuiz("123456");
-        },
-      ),
+      // floatingActionButton: Row(
+      //   children: [
+      //     FloatingActionButton(
+      //       child: Icon(Icons.chevron_right),
+      //       tooltip: "Next",
+      //       onPressed: () {
+      //         Provider.of<QuizProvider>(context, listen: false)
+      //             .fetchQuiz("123456");
+      //       },
+      //     ),
+      //     FloatingActionButton(
+      //       child: Icon(Icons.chevron_right),
+      //       tooltip: "Next",
+      //       onPressed: () {
+      //         _pageController.nextPage(
+      //             duration: Duration(milliseconds: 500), curve: Curves.easeIn);
+      //       },
+      //     ),
+      //   ],
+      // ),
       body: Consumer<QuizProvider>(builder: (context, value, child) {
         if (value.loadingQuiz) {
           return Center(

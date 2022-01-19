@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:page_transition/page_transition.dart';
@@ -7,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:quizbanao/providers/quiz.dart';
 import 'package:quizbanao/providers/result.dart';
 import 'package:quizbanao/screens/login.dart';
+import 'package:quizbanao/utils/colors.dart';
 import 'package:quizbanao/utils/files.dart';
 
 class ResultScreen extends StatelessWidget {
@@ -78,7 +80,18 @@ class _LeaderBoardState extends State<LeaderBoard> {
           builder: (context, value, child) => value.loadingQuiz
               ? Center(child: CircularProgressIndicator())
               : value.topperData.length == 0
-                  ? Center(child: Text('No results yet'))
+                  ? SpinKitThreeBounce(
+                      itemBuilder: (BuildContext context, int index) {
+                        return DecoratedBox(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color: index.isEven
+                                ? QColorScheme.blue4
+                                : QColorScheme.yellow2,
+                          ),
+                        );
+                      },
+                    )
                   : Column(children: [
                       SizedBox(
                         height: 10,

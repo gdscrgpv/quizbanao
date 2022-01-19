@@ -19,7 +19,7 @@ class ResultProvider with ChangeNotifier {
             marks: data['marks'],
             quizId: data['quizId'],
             email: data['email'],
-            timeTaken: data['time_taken']));
+            timeTaken: double.parse(data['time_taken'].toString())));
         print(data);
         print("Topperdata" + _topperData.toString());
         // _topperData.add(data);
@@ -27,7 +27,7 @@ class ResultProvider with ChangeNotifier {
     }).then((_) {
       loadingQuiz = false;
       notifyListeners();
-      _topperData.sort((a, b){
+      _topperData.sort((a, b) {
         if (b.marks == a.marks) {
           return a.timeTaken.compareTo(b.timeTaken);
         }
