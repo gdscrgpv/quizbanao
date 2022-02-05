@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -17,22 +18,20 @@ import 'package:quizbanao/utils/text.dart';
 
 class LoginScreen extends StatelessWidget {
   static const routeName = "/auth";
+  final _formKey = GlobalKey<FormState>();
 
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _quizIdController = TextEditingController();
+
+  //     TextEditingController _emailController =
+  //     TextEditingController(text: "test@test.co");
+  // TextEditingController _nameController =
+  //     TextEditingController(text: "Gustavo");
+  // TextEditingController _quizIdController =
+  //     TextEditingController(text: "123456");
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
-
-    TextEditingController _emailController = TextEditingController();
-    TextEditingController _nameController = TextEditingController();
-    TextEditingController _quizIdController = TextEditingController();
-
-    //     TextEditingController _emailController =
-    //     TextEditingController(text: "test@test.co");
-    // TextEditingController _nameController =
-    //     TextEditingController(text: "Gustavo");
-    // TextEditingController _quizIdController =
-    //     TextEditingController(text: "123456");
-
     return Scaffold(
       resizeToAvoidBottomInset: true,
       // floatingActionButton: FloatingActionButton(onPressed: () async {
@@ -50,82 +49,39 @@ class LoginScreen extends StatelessWidget {
         leading: Builder(
           builder: (context) => IconButton(
             icon: Icon(
-              Icons.menu,
-              color: Colors.black.withOpacity(0.5),
+              Icons.info,
+              color: Colors.grey,
             ),
             onPressed: () {
               log("message");
               // open drawer
-              Scaffold.of(context).openDrawer();
+              showAnimatedDialog(
+                context: context,
+                barrierDismissible: true,
+                builder: (BuildContext context) {
+                  return ClassicGeneralDialogWidget(
+                      titleText: 'Quiz Banao',
+                      contentText: 'App version: v1.0',
+                      positiveText: "Cool!",
+                      negativeText: "Report bug",
+                      actions: [
+                        FlatButton(
+                          child: Text("Close"),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        )
+                      ]);
+                },
+                animationType: DialogTransitionType.size,
+                curve: Curves.fastOutSlowIn,
+                duration: Duration(seconds: 1),
+              );
             },
           ),
         ),
       ),
-      drawer: Drawer(
-        child: Column(
-          children: [
-            Container(
-              height: 200,
-              width: double.infinity,
-              color: Colors.black,
-              child: Center(
-                child: Text(
-                  "QuizBanao",
-                  style: GoogleFonts.poppins(
-                    fontSize: 40,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ),
-            ListTile(
-              title: Text(
-                "Home",
-                style: GoogleFonts.poppins(
-                  fontSize: 20,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              onTap: () {},
-            ),
-            ListTile(
-              title: Text(
-                "About",
-                style: GoogleFonts.poppins(
-                  fontSize: 20,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              onTap: () {},
-            ),
-            ListTile(
-              title: Text(
-                "Contact",
-                style: GoogleFonts.poppins(
-                  fontSize: 20,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              onTap: () {},
-            ),
-            ListTile(
-              title: Text(
-                "Logout",
-                style: GoogleFonts.poppins(
-                  fontSize: 20,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              onTap: () {},
-            ),
-          ],
-        ),
-      ),
+
       // extendBodyBehindAppBar: true,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -253,7 +209,7 @@ class LoginScreen extends StatelessWidget {
                             decoration: InputDecoration(
                                 labelText: "Quiz ID",
                                 border: OutlineInputBorder()),
-                            keyboardType: TextInputType.number),
+                            keyboardType: TextInputType.text),
                         SizedBox(height: 20),
                         SubmitButton(
                             formKey: _formKey,

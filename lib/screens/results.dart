@@ -16,6 +16,10 @@ class ResultScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        // floatingActionButton: FloatingActionButton(onPressed: () {
+        //   var qId = Provider.of<QuizProvider>(context, listen: false).quiz.id;
+        //   Provider.of<ResultProvider>(context, listen: false).getResult(qId);
+        // }),
         body: SafeArea(
       child: LeaderBoard(),
     ));
@@ -55,17 +59,19 @@ class LeaderBoard extends StatefulWidget {
 }
 
 class _LeaderBoardState extends State<LeaderBoard> {
+  String qId = '';
   @override
   void initState() {
     super.initState();
-    Provider.of<ResultProvider>(context, listen: false).getResult();
+    qId = Provider.of<QuizProvider>(context, listen: false).quiz.id;
+    Provider.of<ResultProvider>(context, listen: false).getResult(qId);
   }
 
   @override
   Widget build(BuildContext context) {
     // final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = new GlobalKey<RefreshIndicatorState>(debugLabel: '_LoginFormState');
     Future _refresh() {
-      return Provider.of<ResultProvider>(context, listen: false).getResult();
+      return Provider.of<ResultProvider>(context, listen: false).getResult(qId);
     }
 
     return WillPopScope(
@@ -163,7 +169,8 @@ class _LeaderBoardState extends State<LeaderBoard> {
                                     value.topperData[index].marks.toString() +
                                     " Time: " +
                                     value.topperData[index].timeTaken
-                                        .toString()),
+                                        .toStringAsFixed(1) +
+                                    ' s'),
                                 trailing: Text(
                                   value.topperData[index].fullName.toString(),
                                   overflow: TextOverflow.ellipsis,

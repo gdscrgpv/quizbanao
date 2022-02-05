@@ -55,6 +55,7 @@ class QuizProvider with ChangeNotifier {
       log("Does not exists");
       return false;
     }
+    return false;
   }
 
   //submit responses

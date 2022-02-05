@@ -8,15 +8,19 @@ class ResultProvider with ChangeNotifier {
   late List<UserModel> _topperData = [];
   List<UserModel> get topperData => _topperData;
 
-  Future getResult() async {
+  Future getResult(String id) async {
     topperData.clear();
     loadingQuiz = true;
-    FirebaseFirestore.instance.collection('users').get().then((value) {
+    FirebaseFirestore.instance
+        .collection('users')
+        .where('quizId', isEqualTo: id)
+        .get()
+        .then((value) {
       value.docs.forEach((element) {
         Map data = element.data();
         _topperData.add(UserModel(
             fullName: data['fullName'],
-            marks: data['marks'],
+            marks: int.parse(data['marks'].toString()),
             quizId: data['quizId'],
             email: data['email'],
             timeTaken: double.parse(data['time_taken'].toString())));
