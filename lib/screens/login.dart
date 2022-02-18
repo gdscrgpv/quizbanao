@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:quizbanao/providers/auth.dart';
 import 'package:quizbanao/providers/quiz.dart';
 import 'package:quizbanao/screens/questions.dart';
+import 'package:quizbanao/screens/results.dart';
 import 'package:quizbanao/utils/colors.dart';
 import 'package:quizbanao/utils/files.dart';
 import 'package:quizbanao/utils/text.dart';
@@ -23,6 +24,7 @@ class LoginScreen extends StatelessWidget {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _nameController = TextEditingController();
   TextEditingController _quizIdController = TextEditingController();
+  TextEditingController _quizIdSearchController = TextEditingController();
 
   //     TextEditingController _emailController =
   //     TextEditingController(text: "test@test.co");
@@ -80,6 +82,62 @@ class LoginScreen extends StatelessWidget {
             },
           ),
         ),
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.leaderboard,
+              color: Colors.grey,
+            ),
+            onPressed: () {
+              log("message");
+              // open drawer
+              showAnimatedDialog(
+                context: context,
+                barrierDismissible: true,
+                builder: (BuildContext context) {
+                  return SimpleDialog(
+                    children: [
+                      TextFormField(
+                        controller: _quizIdSearchController,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Please enter a Quiz ID";
+                          }
+                        },
+                        decoration: InputDecoration(
+                              labelText: "Quiz ID",
+                              border: OutlineInputBorder()),
+                      ),
+                      TextButton(
+                          onPressed: () async {
+                            final prov = Provider.of<QuizProvider>(context,listen: false);
+                            prov.fetchQuiz(_quizIdSearchController.text);
+                            bool response = await prov.validateQuizId(_quizIdSearchController.text);
+                            if (response) {
+                              Navigator.pushNamed(
+                                  context, ResultScreen.routeName);
+                            } else {
+                              // If Quiz ID is incorrect then show a snackbar
+                              _quizIdController.text = '';
+                              Navigator.of(context).pop();
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                content: Text("Quiz ID is invalid"),
+                                backgroundColor: Colors.red,
+                              ));
+                            }
+                          },
+                          child: Text('Submit'))
+                    ],
+                  );
+                },
+                animationType: DialogTransitionType.size,
+                curve: Curves.fastOutSlowIn,
+                duration: Duration(seconds: 1),
+              );
+            },
+          ),
+        ],
       ),
 
       // extendBodyBehindAppBar: true,
