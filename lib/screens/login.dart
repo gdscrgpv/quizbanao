@@ -97,22 +97,27 @@ class LoginScreen extends StatelessWidget {
                 builder: (BuildContext context) {
                   return SimpleDialog(
                     children: [
-                      TextFormField(
-                        controller: _quizIdSearchController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Please enter a Quiz ID";
-                          }
-                        },
-                        decoration: InputDecoration(
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextFormField(
+                          controller: _quizIdSearchController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please enter a Quiz ID";
+                            }
+                          },
+                          decoration: InputDecoration(
                               labelText: "Quiz ID",
                               border: OutlineInputBorder()),
+                        ),
                       ),
                       TextButton(
                           onPressed: () async {
-                            final prov = Provider.of<QuizProvider>(context,listen: false);
+                            final prov = Provider.of<QuizProvider>(context,
+                                listen: false);
                             prov.fetchQuiz(_quizIdSearchController.text);
-                            bool response = await prov.validateQuizId(_quizIdSearchController.text);
+                            bool response = await prov
+                                .validateQuizId(_quizIdSearchController.text);
                             if (response) {
                               Navigator.pushNamed(
                                   context, ResultScreen.routeName);
@@ -127,7 +132,10 @@ class LoginScreen extends StatelessWidget {
                               ));
                             }
                           },
-                          child: Text('Submit'))
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text('View leaderboard'),
+                          ))
                     ],
                   );
                 },
