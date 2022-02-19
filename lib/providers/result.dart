@@ -24,8 +24,8 @@ class ResultProvider with ChangeNotifier {
             quizId: data['quizId'],
             email: data['email'],
             timeTaken: double.parse(data['time_taken'].toString())));
-        print(data);
-        print("Topperdata" + _topperData.toString());
+        // print(data);
+        // print("Topperdata" + _topperData.toString());
         // _topperData.add(data);
       });
     }).then((_) {

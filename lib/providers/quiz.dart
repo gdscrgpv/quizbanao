@@ -61,22 +61,22 @@ class QuizProvider with ChangeNotifier {
   //submit responses
   Future addAnswer(
       int index, String answer, double timeTaken, int maxTime) async {
-    print("MAKING SURE THIS RUN 3 TIME");
-    print("index: $index");
-    print("answer: $answer");
-    print("timeTaken: $timeTaken");
-    print("maxTime: $maxTime");
+    //print("MAKING SURE THIS RUN 3 TIME");
+    //print("index: $index");
+    //print("answer: $answer");
+    //print("timeTaken: $timeTaken");
+    //print("maxTime: $maxTime");
     if (timeTaken > maxTime) {
       timeTaken = maxTime.toDouble();
     }
     if ("option" + index.toString() == answer) {
       _marks++;
       _timeTaken += timeTaken;
-      print("MARKS" + _marks.toString());
-      print("TIME" + _timeTaken.toString());
+      //print("MARKS" + _marks.toString());
+      //print("TIME" + _timeTaken.toString());
     } else {
       _timeTaken += maxTime;
-      print("TIME" + _timeTaken.toString());
+      //print("TIME" + _timeTaken.toString());
     }
   }
 
@@ -89,7 +89,7 @@ class QuizProvider with ChangeNotifier {
 
   // fetch questions
   void fetchQuiz(String id) async {
-    print("******* " + id.toString());
+    //print("******* " + id.toString());
     loadingQuiz = true;
     notifyListeners();
     var doc =
@@ -101,8 +101,8 @@ class QuizProvider with ChangeNotifier {
     }
     if (doc.exists) {
       Map data = doc.data() as Map<String, dynamic>;
-      // print(data.toString());
-      // print(data['questions']['question'].toString());
+      // //print(data.toString());
+      // //print(data['questions']['question'].toString());
 
       _quiz = Quiz(
           id: id,
@@ -116,7 +116,7 @@ class QuizProvider with ChangeNotifier {
               time: q['time'],
             );
           })).toList()));
-      // print(_quiz.questions.length.toString());
+      // //print(_quiz.questions.length.toString());
 
     }
     await Future.delayed(Duration(seconds: 2), () {

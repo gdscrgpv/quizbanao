@@ -7,12 +7,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:330849933840:android:39ffadd9fa556dcb584895",
+        "mobilesdk_app_id": "1:330849933840:android:875f78a768a2934a584895",
         "android_client_info": {
-          "package_name": "com.example.quizbanao"
+          "package_name": "com.quizbanao.app"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "330849933840-uk754aee6peedpbji75qpqejq3hob1e4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.quizbanao.app",
+            "certificate_hash": "086ec67d7c74c52930d87e2abd3553b8b3196cde"
+          }
+        },
         {
           "client_id": "330849933840-rfj65qphb767orudh2h0or8psibjhhsu.apps.googleusercontent.com",
           "client_type": 3
