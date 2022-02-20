@@ -170,7 +170,7 @@ class _LeaderBoardState extends State<LeaderBoard> {
                                     " Time: " +
                                     value.topperData[index].timeTaken
                                         .toStringAsFixed(1) +
-                                    ' s'),
+                                    's'),
                                 trailing: Text(
                                   value.topperData[index].fullName.toString(),
                                   overflow: TextOverflow.ellipsis,
@@ -213,7 +213,8 @@ class _LeaderBoardState extends State<LeaderBoard> {
               'Points: ' +
                   value.marks.toString() +
                   ' | Time: ' +
-                  value.timeTaken.toString(),
+                  value.timeTaken.toStringAsFixed(1) +
+                  's',
               style: GoogleFonts.poppins(
                   fontSize: 20, fontWeight: FontWeight.w400),
             ),
