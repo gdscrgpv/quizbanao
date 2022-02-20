@@ -18,7 +18,7 @@ import 'package:quizbanao/utils/files.dart';
 import 'package:quizbanao/utils/text.dart';
 
 class LoginScreen extends StatelessWidget {
-  static const routeName = "/auth";
+  static const routeName = "/hello";
   final _formKey = GlobalKey<FormState>();
 
   TextEditingController _emailController = TextEditingController();

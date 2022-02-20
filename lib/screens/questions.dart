@@ -10,7 +10,7 @@ import 'package:quizbanao/utils/files.dart';
 import 'package:timer_builder/timer_builder.dart';
 
 class QuizScreen extends StatefulWidget {
-  static const routeName = "/quiz-screen";
+  static const routeName = "/quiz";
   @override
   _QuizScreenState createState() => _QuizScreenState();
 }

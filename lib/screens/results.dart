@@ -12,7 +12,7 @@ import 'package:quizbanao/utils/colors.dart';
 import 'package:quizbanao/utils/files.dart';
 
 class ResultScreen extends StatelessWidget {
-  static const routeName = "/results-screen";
+  static const routeName = "/leaderboard";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
