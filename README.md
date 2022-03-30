@@ -1,16 +1,18 @@
-# quizbanao
+# QuizBanao 
 
-A new Flutter project.
+<img src="assets/readme/logo.png" height="50"/> uizBanao is an open sourced app that allows you to host quizzes for Webinars and Live events!
 
-## Getting Started
+It can also be used for other types of quizzes.
+<img src="assets/readme/ss1.jpg" height="500"/> <img src="assets/readme/ss2.jpg" height="500"/> <img src="assets/readme/ss3.jpg" height="500"/> 
 
-This project is a starting point for a Flutter application.
+This Flutter project supports Android and Web out of the box.
 
-A few resources to get you started if this is your first Flutter project:
+## Devs 
+[Apoorv Pandey](https://github.com/apoorvpandey0), [Ankur Gupta](https://github.com/ankurg132)
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+## Links
+[Play store link](https://play.google.com/console/u/0/developers/6195582735877306679/app/4976094919562156145/app-dashboard?timespan=thirtyDays )
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+[Web version](https://web.quizbanao.com/)
+
+[Landing page](https://quizbanao.com/)
